@@ -1,0 +1,10 @@
+{
+    "local-microservice": {
+        "description": "Grant access for script",
+        "read": {
+            "ubus": {
+                "local-microservice": [ "output" ]
+            }
+        }
+    }
+}

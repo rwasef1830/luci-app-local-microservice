@@ -1,0 +1,58 @@
+#!/bin/sh
+
+. /lib/functions.sh
+. /lib/functions/network.sh
+. /usr/share/libubox/jshn.sh
+
+usage() {
+    local status="$1"
+    local msg="$2"
+    if [ -n "$msg" ]; then
+        echo "$msg"
+        echo ""
+    fi
+    echo "Usage: $(basename "$0") call <command>"
+    echo "command:"
+    echo "  output:   get microservice output"
+
+    exit "$status"
+}
+
+curl_output() {
+    local url="$1"
+    curl -s "$url"
+}
+
+
+main() {
+    case "$1" in
+        list)
+            json_init
+            json_add_object "output"
+            json_add_string "content" "x"
+            json_close_object
+            json_dump
+            ;;
+        call)
+            case "$2" in
+                output)
+                    local url
+                    config_load local_microservice
+                    config_get url settings url 'http://127.0.0.1:9999'
+                    json_init
+                    json_add_string content "$(curl_output "$url")"
+                    json_close_object
+                    json_dump
+                    ;;
+                *)
+                    usage "1" "Command not supported"
+                    ;;                    
+            esac
+            ;;
+        *)
+            usage "1" "Command not supported"
+            ;;
+    esac
+}
+
+main "$@"
