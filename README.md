@@ -1,6 +1,6 @@
 ## luci-app-local-microservice
 
-After installing, edit `/etc/config/local_service`
+After installing, edit `/etc/config/local_microservice`
 
 ```
 config local_microservice 'settings'
